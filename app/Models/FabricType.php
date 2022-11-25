@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class FabricType extends Model
 {
     use HasFactory;
+    //Product
+    public function product(){
+        return $this->hasMany(Product::class,'fabric_type_id');
+    }
 }

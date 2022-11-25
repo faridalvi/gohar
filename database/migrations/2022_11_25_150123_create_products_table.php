@@ -17,8 +17,8 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('entry')->nullable();
             $table->date('date')->nullable();
-            $table->date('name')->nullable();
-            $table->date('sale_order')->nullable();
+            $table->string('name')->nullable();
+            $table->string('sale_order')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('season_id')->nullable();
             $table->unsignedBigInteger('age_group_id')->nullable();
