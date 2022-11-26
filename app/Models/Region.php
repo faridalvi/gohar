@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Region extends Model
 {
     use HasFactory;
+    protected $table = 'regions';
+    protected $fillable = [
+        'name','code','country_id','created_by','updated_by'
+    ];
     //Product
     public function product(){
         return $this->hasMany(Product::class,'region_id');
