@@ -20,7 +20,7 @@ class CreateCategoriesTable extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('CASCADE');
+            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('restrict');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('CASCADE');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('CASCADE');
             $table->timestamps();
