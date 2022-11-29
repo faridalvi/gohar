@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth','verified','IsActive','xss'],'prefix'=>'ad
     //Product
     Route::resource('product',ProductController::class);
     Route::get('get/products',[ProductController::class,'getProducts'])->name('getProducts');
+    Route::post('/product/fetch-categories', [ProductController::class,'fetchCategories'])->name('fetchCategories');
 });
 Route::get('/logout', function () {
     Auth::logout();
