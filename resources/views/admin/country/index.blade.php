@@ -1,10 +1,10 @@
 @extends('admin.layouts.app')
-@section('title','Categories')
+@section('title','Countries')
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between py-4">
-            <p class="page-title">Categories</p>
-            <a class="btn btn-sm btn-success" href="{{route('category.create')}}">Add New</a>
+            <p class="page-title">Countries</p>
+            <a class="btn btn-sm btn-success" href="{{route('country.create')}}">Add New</a>
         </div>
         <div class="card rounded-0">
             <div class="card-body">
@@ -14,8 +14,7 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Parent</th>
+                            <th scope="col">Code</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -32,12 +31,11 @@
                 processing: true,
                 serverSide: true,
                 order:[[0,'desc']],
-                ajax: "{{route('getCategories')}}",
+                ajax: "{{route('getCountries')}}",
                 columns: [
                     { data: 'id' },
                     { data: 'name' },
-                    { data: 'slug' },
-                    { data: 'parent' },
+                    { data: 'code' },
                     { data: null}
                 ],
                 columnDefs: [
@@ -51,16 +49,16 @@
                     },
                     {
                         render: function (data,type,row,meta) {
-                            var edit ='{{ route("category.edit", ":id") }}';
+                            var edit ='{{ route("country.edit", ":id") }}';
                             edit = edit.replace(':id', data.id);
-                            var del ='{{ route("category.destroy", ":id") }}';
+                            var del ='{{ route("country.destroy", ":id") }}';
                             del = del.replace(':id', data.id);
 
                             return '<div class="d-flex">' +
-                                @can('category-edit')
+                                @can('country-edit')
                                     '<a href="'+edit+'" class="btn btn-sm btn-warning mx-2"><i class="fa fa-edit"></i></a>'+
                                 @endcan
-                                    @can('category-delete')
+                                    @can('country-delete')
                                     '<form action="'+del+'" method="POST">'+
                                 '<input type="hidden" name="_token" value="{{ csrf_token() }}">'+
                                 '<input type="hidden" name="_method" value="delete" />'+

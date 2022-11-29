@@ -157,7 +157,6 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $this->createSlug($request->name);
         $category->parent_id = (!empty($request->parent_id)?$request->parent_id:null);
-        $category->created_by = $userId;
         $category->updated_by = $userId;
         $saved = $category->save();
         if (!empty($saved)){
