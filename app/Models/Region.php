@@ -12,6 +12,10 @@ class Region extends Model
     protected $fillable = [
         'name','code','country_id','created_by','updated_by'
     ];
+    //Country
+    public function country(){
+        return $this->belongsTo(Country::class,'country_id');
+    }
     //Product
     public function product(){
         return $this->hasMany(Product::class,'region_id');
