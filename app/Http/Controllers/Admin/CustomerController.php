@@ -186,7 +186,10 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         $customer = Customer::find($id);
+        if ($customer->product->count() > 0){
+            return redirect(route('customer.index'))->with('warning','Please Delete its Product First');
+        }
         $customer->delete();
-        return redirect()->route('customer.index')->with('success','Customer deleted successfully');
+        return redirect()->route('customer.index')->with('message','Customer deleted successfully');
     }
 }

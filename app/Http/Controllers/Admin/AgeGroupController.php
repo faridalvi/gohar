@@ -172,8 +172,11 @@ class AgeGroupController extends Controller
     public function destroy($id)
     {
         $ageGroup = AgeGroup::find($id);
+        if ($ageGroup->product->count() > 0){
+            return redirect(route('age-group.index'))->with('warning','Please Delete its Product First');
+        }
         $ageGroup->delete();
-        return redirect()->route('age-group.index')->with('success','Age Group deleted successfully');
+        return redirect()->route('age-group.index')->with('message','Age Group deleted successfully');
     }
     //Unique Slug
     public function createSlug($title, $id = 0)

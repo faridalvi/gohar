@@ -170,7 +170,10 @@ class AtributeWeavingController extends Controller
     public function destroy($id)
     {
         $weaving = AtributeWeaving::find($id);
+        if ($weaving->product->count() > 0){
+            return redirect(route('atribute-weaving.index'))->with('warning','Please Delete its Product First');
+        }
         $weaving->delete();
-        return redirect()->route('atribute-weaving.index')->with('success','Weaving deleted successfully');
+        return redirect()->route('atribute-weaving.index')->with('message','Weaving deleted successfully');
     }
 }

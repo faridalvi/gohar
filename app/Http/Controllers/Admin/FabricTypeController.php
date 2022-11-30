@@ -170,7 +170,10 @@ class FabricTypeController extends Controller
     public function destroy($id)
     {
         $fabric = FabricType::find($id);
+        if ($fabric->product->count() > 0){
+            return redirect(route('fabric-type.index'))->with('warning','Please Delete its Product First');
+        }
         $fabric->delete();
-        return redirect()->route('fabric-type.index')->with('success','Fabric deleted successfully');
+        return redirect()->route('fabric-type.index')->with('message','Fabric deleted successfully');
     }
 }

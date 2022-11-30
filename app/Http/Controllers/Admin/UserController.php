@@ -195,7 +195,7 @@ class UserController extends Controller
     {
         User::find($id)->delete();
         return redirect()->route('user.index')
-            ->with('success','User deleted successfully');
+            ->with('message','User deleted successfully');
     }
     //Create Slug
     public function createSlug($title, $id = 0)

@@ -178,7 +178,10 @@ class AtributeYarnController extends Controller
     public function destroy($id)
     {
         $yarn = AtributeYarn::find($id);
+        if ($yarn->product->count() > 0){
+            return redirect(route('atribute-yarn.index'))->with('warning','Please Delete its Product First');
+        }
         $yarn->delete();
-        return redirect()->route('atribute-yarn.index')->with('success','Yarn deleted successfully');
+        return redirect()->route('atribute-yarn.index')->with('message','Yarn deleted successfully');
     }
 }

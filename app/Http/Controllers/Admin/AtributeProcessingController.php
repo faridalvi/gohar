@@ -170,7 +170,10 @@ class AtributeProcessingController extends Controller
     public function destroy($id)
     {
         $processing = AtributeProcessing::find($id);
+        if ($processing->product->count() > 0){
+            return redirect(route('atribute-processing.index'))->with('warning','Please Delete its Product First');
+        }
         $processing->delete();
-        return redirect()->route('atribute-processing.index')->with('success','Processing deleted successfully');
+        return redirect()->route('atribute-processing.index')->with('message','Processing deleted successfully');
     }
 }

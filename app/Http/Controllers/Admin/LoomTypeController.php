@@ -168,7 +168,10 @@ class LoomTypeController extends Controller
     public function destroy($id)
     {
         $loom = LoomType::find($id);
+        if ($loom->product->count() > 0){
+            return redirect(route('loom-type.index'))->with('warning','Please Delete its Product First');
+        }
         $loom->delete();
-        return redirect()->route('loom-type.index')->with('success','Loom Type deleted successfully');
+        return redirect()->route('loom-type.index')->with('message','Loom Type deleted successfully');
     }
 }

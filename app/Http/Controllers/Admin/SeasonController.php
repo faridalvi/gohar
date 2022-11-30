@@ -166,8 +166,11 @@ class SeasonController extends Controller
     public function destroy($id)
     {
         $season = Season::find($id);
+        if ($season->product->count() > 0){
+            return redirect(route('season.index'))->with('warning','Please Delete its Product First');
+        }
         $season->delete();
-        return redirect()->route('season.index')->with('success','Season deleted successfully');
+        return redirect()->route('season.index')->with('message','Season deleted successfully');
     }
     //Unique Slug
     public function createSlug($title, $id = 0)

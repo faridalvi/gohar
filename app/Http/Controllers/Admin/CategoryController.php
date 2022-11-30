@@ -175,10 +175,13 @@ class CategoryController extends Controller
 
         $category = Category::find($id);
         if ($category->children->count() > 0){
-            return redirect(route('category.index'))->with('warning','Cant delete because it has sub-categories in it');
+            return redirect(route('category.index'))->with('warning','Please Delete its Sub Categories First');
+        }
+        if ($category->product->count() > 0){
+            return redirect(route('category.index'))->with('warning','Please Delete its Product First');
         }
         $category->delete();
-        return redirect()->route('category.index')->with('success','Category deleted successfully');
+        return redirect()->route('category.index')->with('message','Category deleted successfully');
     }
     //Unique Slug
     public function createSlug($title, $id = 0)

@@ -177,7 +177,10 @@ class RegionController extends Controller
     public function destroy($id)
     {
         $region = Region::find($id);
+        if ($region->product->count() > 0){
+            return redirect(route('region.index'))->with('warning','Please Delete its Product First');
+        }
         $region->delete();
-        return redirect()->route('region.index')->with('success','Region deleted successfully');
+        return redirect()->route('region.index')->with('message','Region deleted successfully');
     }
 }

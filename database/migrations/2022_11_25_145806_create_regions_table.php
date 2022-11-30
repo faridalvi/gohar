@@ -20,7 +20,7 @@ class CreateRegionsTable extends Migration
             $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('CASCADE');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('restrict');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('CASCADE');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('CASCADE');
             $table->timestamps();

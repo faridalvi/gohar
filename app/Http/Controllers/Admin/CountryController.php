@@ -168,7 +168,13 @@ class CountryController extends Controller
     public function destroy($id)
     {
         $country = Country::find($id);
+        if ($country->region->count() > 0){
+            return redirect(route('country.index'))->with('warning','Please Delete its Regions First');
+        }
+        if ($country->product->count() > 0){
+            return redirect(route('country.index'))->with('warning','Please Delete its Product First');
+        }
         $country->delete();
-        return redirect()->route('country.index')->with('success','Country deleted successfully');
+        return redirect()->route('country.index')->with('message','Country deleted successfully');
     }
 }

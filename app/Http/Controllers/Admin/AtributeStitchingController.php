@@ -170,7 +170,10 @@ class AtributeStitchingController extends Controller
     public function destroy($id)
     {
         $stitching = AtributeStitching::find($id);
+        if ($stitching->product->count() > 0){
+            return redirect(route('atribute-stitching.index'))->with('warning','Please Delete its Product First');
+        }
         $stitching->delete();
-        return redirect()->route('atribute-stitching.index')->with('success','Stitching deleted successfully');
+        return redirect()->route('atribute-stitching.index')->with('message','Stitching deleted successfully');
     }
 }
