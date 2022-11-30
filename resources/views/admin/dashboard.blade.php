@@ -120,6 +120,21 @@
                     getFilters(hash)
                 });
                 //Filters
+                $.ajax({
+                    url: "{{route('getDashboardProducts')}}",
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (result) {
+                        var productData = '';
+                        $.each(result.products, function (key, value) {
+                            var image ='{{ asset('product/')}}'+'/'+ value.image;
+                            productData+='<div class="col-md-2 product-image mb-2">';
+                            productData+='<img src="' + image + '" alt="'+value.name+'" class="img-thumbnail">';
+                            productData+='</div>';
+                        });
+                        $("#productData").append(productData);
+                    }
+                });
                 function getFilters(data){
                     $("#productData").html('')
                     $.ajax({
@@ -128,13 +143,19 @@
                         data: data,
                         dataType: 'json',
                         success: function (result) {
+                            $("#productData").html('')
                             var productData = '';
-                            $.each(result.products, function (key, value) {
-                                var image ='{{ asset('product/')}}'+'/'+ value.image;
-                                productData+='<div class="col-md-2 product-image mb-2">';
-                                productData+='<img src="' + image + '" alt="'+value.name+'" class="img-thumbnail">';
-                                productData+='</div>';
-                            });
+                           if (result.products.length > 0) {
+                               $.each(result.products, function (key, value) {
+                                   var image = '{{ asset('product/')}}' + '/' + value.image;
+                                   productData += '<div class="col-md-2 product-image mb-2">';
+                                   productData += '<img src="' + image + '" alt="' + value.name + '" class="img-thumbnail">';
+                                   productData += '</div>';
+                               });
+                           }
+                           else{
+                               productData += '<div class="col-md-12 mb-2"><h1>No Data Found</h1></div>';
+                           }
                             $("#productData").append(productData);
                         }
                     });
