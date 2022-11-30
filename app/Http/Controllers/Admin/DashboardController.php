@@ -22,8 +22,29 @@ class DashboardController extends Controller
         return view('admin.dashboard',compact('categories','customers','seasons','regions','yarns'));
     }
     public function getDashboardProducts(Request $request){
-
-        $data['products'] = Product::orderBy('id','desc')->get();
+        $main = $request->get('main');
+        $sub = $request->get('sub');
+        $customerId = $request->get('customerId');
+        $seasonId = $request->get('seasonId');
+        $regionId = $request->get('regionId');
+        $yarnId = $request->get('yarnId');
+        $data['products'] = Product::orderBy('id','desc')->where(function ($q) use ($request,$sub,$customerId,$seasonId,$regionId,$yarnId){
+            if (!empty($sub)){
+                $q->where('category_id',$sub);
+            }
+            if (!empty($seasonId)){
+                $q->where('season_id',$seasonId);
+            }
+            if (!empty($regionId)){
+                $q->where('region_id',$regionId);
+            }
+            if (!empty($customerId)){
+                $q->where('customer_id',$customerId);
+            }
+            if (!empty($yarnId)){
+                $q->where('atribute_yarn_id',$yarnId);
+            }
+        })->get();
         return response()->json($data);
     }
 }
