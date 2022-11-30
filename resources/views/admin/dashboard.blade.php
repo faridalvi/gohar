@@ -5,144 +5,117 @@
         <div class="py-4">
             <p class="page-title">Dashboard</p>
         </div>
-        <div class="row mb-4">
-            <div class="col-xl-3 col-lg-6 mb-2">
-                <div class="bg-pink">
-                    <div class="info-box">
-                        <div class="info-icon">
-                            <i class="fa fa-bars"></i>
-                        </div>
-                        <div class="info-content">
-                            <p>New Tasks</p>
-                            <h3>125</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 mb-2">
-                <div class="bg-cyan">
-                    <div class="info-box">
-                        <div class="info-icon">
-                            <i class="fas fa-question-circle"></i>
-                        </div>
-                        <div class="info-content">
-                            <p>New Tickets</p>
-                            <h3>125</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 mb-2">
-                <div class="bg-light-green">
-                    <div class="info-box">
-                        <div class="info-icon">
-                            <i class="fas fa-comment-alt"></i>
-                        </div>
-                        <div class="info-content">
-                            <p>New Comments</p>
-                            <h3>125</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6 mb-2">
-                <div class="bg-orange">
-                    <div class="info-box">
-                        <div class="info-icon">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="info-content">
-                            <p>New Visitors</p>
-                            <h3>125</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{--Month wise chart--}}
-        <div class="row">
-            <div class="col-xl-12 charts mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h4>Month Wise</h4>
-                        <div class="chart-container">
-                            <canvas id="month_wise" height="400" width="1595" style="display: block; box-sizing: border-box; height: 400px; width: 1595px;"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{--Datatable--}}
-        <div class="row mb-4">
-            <div class="col-xl-8 col-lg-12 mb-4">
-                <div class="card rounded-0">
-                    <div class="p-3 border-bottom">
-                        <h4>TASK INFOS</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Task</th>
-                                    <th>Status</th>
-                                    <th>Manager</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Task A</td>
-                                    <td><span class="data-status bg-cyan">Doing</span></td>
-                                    <td>Salik Munir</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Task B</td>
-                                    <td><span class="data-status bg-light-blue">To do</span></td>
-                                    <td>Ibrahim Beaker</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Task C</td>
-                                    <td><span class="data-status bg-light-green">Completed</span></td>
-                                    <td>Ghulam Farid</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Task D</td>
-                                    <td><span class="data-status bg-orange">On Hold</span></td>
-                                    <td>Attia Naseer</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>Task E</td>
-                                    <td><span class="data-status bg-red">Suspended</span></td>
-                                    <td>Umar Draz</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-12 charts">
-                <div class="card rounded-0">
-                    <div class="ps-3 pt-3 border-bottom">
-                        <h4>Application Status</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-container">
-                            <canvas id="application_status" width="341" height="400" style="display: block; box-sizing: border-box; height: 400px; width: 341px;"></canvas>
-                        </div>
+        <div class="card rounded-0">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <select name="main_category" class="form-control rounded-0" id="main-category">
+                                        <option value="">Main Category</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col ms-2">
+                                    <select name="sub_category" class="form-control rounded-0" id="sub-category">
+                                    </select>
+                                </div>
+                                <div class="col ms-2">
+                                    <select name="customer" class="form-control rounded-0">
+                                        <option value="">Customer</option>
+                                        @foreach($customers as $customer)
+                                            <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col ms-2">
+                                    <select name="season" class="form-control rounded-0">
+                                        <option value="">Season</option>
+                                        @foreach($seasons as $season)
+                                            <option value="{{$season->id}}">{{$season->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col ms-2">
+                                    <select name="region" class="form-control rounded-0">
+                                        <option value="">Region</option>
+                                        @foreach($regions as $region)
+                                            <option value="{{$region->id}}">{{$region->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col ms-2">
+                                    <select name="yarn" class="form-control rounded-0">
+                                        <option value="">Yarn Type</option>
+                                        @foreach($yarns as $yarn)
+                                            <option value="{{$yarn->id}}">{{$yarn->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-4" id="productData"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 @endsection
 @push('js')
-    <script src="{{asset('admin/js/Chart.js')}}"></script>
-    <script src="{{asset('admin/js/dashboard.js')}}"></script>
+    <script>
+        $( function() {
+            $( "#datepicker" ).datepicker();
+            $('#sub-category').html('<option value="">Sub Select</option>');
+            $(document).ready(function (){
+                //Select Sub Category
+                $('#main-category').on('change focus', function () {
+                    var idMainCategory = this.value;
+                    $("#sub-category").html('');
+                    $.ajax({
+                        url: "{{route('fetchCategories')}}",
+                        type: "POST",
+                        data: {
+                            main_category_id: idMainCategory,
+                            _token: '{{csrf_token()}}'
+                        },
+                        dataType: 'json',
+                        success: function (result) {
+                            $('#sub-category').html('<option value="">Sub Category</option>');
+                            $.each(result.categories, function (key, value) {
+                                $("#sub-category").append('<option value="' + value.id + '" >' + value.name + '</option>');
+                            });
+                        }
+                    });
+                });
+                //Filters
+                var mainCategory = document.getElementById('main-category').value
+                var subCategory = document.getElementById('sub-category').value
+                console.warn(mainCategory)
+                $.ajax({
+                    url: "{{route('getDashboardProducts')}}",
+                    type: "GET",
+                    data: {
+                        main_category : mainCategory,
+                        sub_category : subCategory,
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        var productData = '';
+                        $.each(result.products, function (key, value) {
+                            var image ='{{ asset('product/')}}'+'/'+ value.image;
+                            productData+='<div class="col-md-2 product-image mb-2">';
+                            productData+='<img src="' + image + '" alt="'+value.name+'" class="img-thumbnail">';
+                            productData+='</div>';
+                        });
+                        $("#productData").append(productData);
+                    }
+                });
+
+            })
+
+        } );
+    </script>
 @endpush

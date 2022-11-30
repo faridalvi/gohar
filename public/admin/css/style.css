@@ -222,6 +222,14 @@ body {
     background-color: var(--red);
     animation: loader-inner 2s infinite ease-in;
 }
+.product-image{
+    height: 250px;
+}
+.product-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 @keyframes loader {
     0% {
         transform: rotate(0deg);

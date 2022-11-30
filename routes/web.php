@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class,'index'])->name('main');
 Route::group(['middleware' => ['auth','verified','IsActive','xss'],'prefix'=>'admin'], function() {
     Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+    Route::get('/getDashboardProducts', [DashboardController::class,'getDashboardProducts'])->name('getDashboardProducts');
     //Permissions
     Route::resource('permission_group',PermissionGroupController::class);
     Route::resource('permission',PermissionController::class);
