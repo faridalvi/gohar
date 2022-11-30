@@ -41,7 +41,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Main Category *</label>
+                                    <label class="form-label">Sub Category *</label>
                                     <select name="sub_category" class="form-control rounded-0" id="sub-category">
                                     </select>
                                 </div>
@@ -206,9 +206,7 @@
 @push('js')
     <script>
         $( function() {
-            $( "#datepicker" ).datepicker({
-                format: 'yy/mm/dd',
-            });
+            $( "#datepicker" ).datepicker();
             $('#sub-category').html('<option value="">Please Select</option>');
             $('#regionId').html('<option value="">Please Select</option>');
             $(document).ready(function (){

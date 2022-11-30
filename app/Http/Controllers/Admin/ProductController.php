@@ -18,6 +18,7 @@ use App\Models\Region;
 use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -189,7 +190,7 @@ class ProductController extends Controller
         else{
             $gallery='';
         }
-        $date = date('d/m/Y',strtotime($request->date));
+        $date = date("Y-m-d", strtotime($request->date));
         $userId = Auth::user()->id;
         $product  = new Product();
         $product->entry = $request->entry;
@@ -244,7 +245,19 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
-        return view('admin.product.edit',compact('product'));
+        $categories = Category::whereHas('children')->orderBy('id','desc')->get();
+        $seasons = Season::orderBy('id','desc')->get();
+        $ageGroups = AgeGroup::orderBy('id','desc')->get();
+        $countries = Country::orderBy('name','asc')->get();
+        $customers = Customer::orderBy('id','asc')->get();
+        $looms = LoomType::orderBy('id','asc')->get();
+        $yarns = AtributeYarn::orderBy('id','asc')->get();
+        $weavings = AtributeWeaving::orderBy('id','asc')->get();
+        $processings = AtributeProcessing::orderBy('id','asc')->get();
+        $stitchings = AtributeStitching::orderBy('id','asc')->get();
+        $fabrics = FabricType::orderBy('id','asc')->get();
+        return view('admin.product.edit',compact('product','categories','seasons','ageGroups','countries','customers','looms','yarns',
+            'weavings','processings','stitchings','fabrics'));
     }
 
     /**
@@ -256,14 +269,98 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:products,name,'.$id,
-            'description' => 'required',
-        ]);
-        $userId = Auth::user()->id;
         $product  = Product::find($id);
+        $this->validate($request, [
+            'entry' => 'required|unique:products,entry,'.$id,
+            'date' => 'required',
+            'name' => 'required|unique:products,name,'.$id,
+            'sale_order' => 'required',
+            'main_category' => 'required',
+            'sub_category' => 'required',
+            'season' => 'required',
+            'age_group' => 'required',
+            'country' => 'required',
+            'region' => 'required',
+            'customer' => 'required',
+            'loom_type' => 'required',
+            'greige_quality' => 'required',
+            'composition' => 'required',
+            'finish_fabric_quality' => 'required',
+            'gsm' => 'required',
+            'process' => 'required',
+            'atribute_yarn' => 'required',
+            'atribute_weaving' => 'required',
+            'atribute_processing' => 'required',
+            'atribute_stitching' => 'required',
+            'fabric_type' => 'required',
+            'description' => 'required',
+            'image' => 'mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        // Upload Image
+        if ($request->hasFile('image')) {
+            if(isset($product) && $product->image){
+                $prevImage = public_path('product/'.$product->image);
+                if (File::exists($prevImage)) { // unlink or remove previous image from folder
+                    File::delete($prevImage);
+                }
+            }
+            $getImage = date('Y').'/'.time().'-'.rand(0,999999).'.'.$request->image->getClientOriginalExtension();
+            $request->image->move(public_path('product/').date('Y'), $getImage);
+            $image = $getImage;
+        }
+        else{
+            $image='';
+        }
+        // Upload Gallery
+        if ($request->hasFile('gallery')) {
+            if(isset($product) && $product->gallery){
+                $preImages = json_decode($product->gallery);
+                foreach ($preImages as $preImg){
+                    $prevImage = public_path('product/gallery/'.$preImg);
+                    if (File::exists($prevImage)) { // unlink or remove previous image from folder
+                        File::delete($prevImage);
+                    }
+                }
+            }
+            foreach($request->file('gallery') as $file)
+            {
+                $getImage = date('Y').'/'.time().'-'.rand(0,999999).'.'.$file->getClientOriginalExtension();
+                $file->move(public_path('product/gallery/').date('Y'), $getImage);
+                $images[] = $getImage;
+            }
+            $gallery = json_encode($images);
+
+        }
+        else{
+            $gallery='';
+        }
+        $date = date("Y-m-d", strtotime($request->date));
+        $userId = Auth::user()->id;
+        $product->entry = $request->entry;
+        $product->date = $date;
         $product->name = $request->name;
+        $product->sale_order = $request->sale_order;
+        $product->category_id = $request->sub_category;
+        $product->season_id = $request->season;
+        $product->age_group_id = $request->age_group;
+        $product->country_id = $request->country;
+        $product->region_id = $request->region;
+        $product->customer_id = $request->customer;
+        $product->loom_type_id = $request->loom_type;
+        $product->greige_quality = $request->greige_quality;
+        $product->composition = $request->composition;
+        $product->finish_fabric_quality = $request->finish_fabric_quality;
+        $product->gsm = $request->gsm;
+        $product->process = $request->process;
+        $product->atribute_yarn_id = $request->atribute_yarn;
+        $product->atribute_weaving_id = $request->atribute_weaving;
+        $product->atribute_processing_id = $request->atribute_processing;
+        $product->atribute_stitching_id = $request->atribute_stitching;
+        $product->fabric_type_id = $request->fabric_type;
         $product->description = $request->description;
+        $product->image = $image;
+        $product->gallery = $gallery;
+        $product->created_by = $userId;
         $product->updated_by = $userId;
         $saved = $product->save();
         if (!empty($saved)){
@@ -280,7 +377,22 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
+        if(isset($product)){
+            $delImage = public_path('product/'.$product->image);
+            if (File::exists($delImage)){
+                File::delete($delImage);
+            }
+        }
+        if(isset($product)){
+            $preImages = json_decode($product->gallery);
+            foreach ($preImages as $preImg){
+                $prevImage = public_path('product/gallery/'.$preImg);
+                if (File::exists($prevImage)) { // unlink or remove previous image from folder
+                    File::delete($prevImage);
+                }
+            }
+        }
         $product->delete();
-        return redirect()->route('product.index')->with('success','Product deleted successfully');
+        return redirect()->route('product.index')->with('message','Product deleted successfully');
     }
 }

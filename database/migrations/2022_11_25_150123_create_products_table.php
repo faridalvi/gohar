@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('entry')->nullable();
-            $table->date('date')->nullable();
+            $table->timestamp('date')->nullable();
             $table->string('name')->nullable();
             $table->string('sale_order')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
