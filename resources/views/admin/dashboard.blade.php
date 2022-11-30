@@ -121,6 +121,7 @@
                 });
                 //Filters
                 function getFilters(data){
+                    $("#productData").html('')
                     $.ajax({
                         url: "{{route('getDashboardProducts')}}",
                         type: "GET",
