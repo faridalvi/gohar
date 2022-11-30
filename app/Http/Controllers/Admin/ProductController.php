@@ -74,11 +74,19 @@ class ProductController extends Controller
         foreach($records as $record){
             $id = $record->id;
             $name = $record->name;
-            $description = $record->description;
+            $customer = (isset($record->customer) ? $record->customer->name : '');
+            $subCategory = (isset($record->category) ? $record->category->name : '');
+            $subCategoryId =(isset($record->category) ? $record->category->id : '');
+            $category = Category::where('id',$subCategoryId)->first();
+            $parentCategory = (isset($category) ? $category->parent->name : '');
+            $season = (isset($record->season) ? $record->season->name : '');
             $data_arr[] = array(
                 "id" => $id,
                 "name" => $name,
-                "description" => $description,
+                "customer" => $customer,
+                "sub_category" => $subCategory,
+                "parent_category" => $parentCategory,
+                "season" => $season,
             );
         }
 

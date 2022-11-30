@@ -14,7 +14,10 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Description</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Sub Category</th>
+                            <th scope="col">Parent Category</th>
+                            <th scope="col">Season</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -35,7 +38,10 @@
                 columns: [
                     { data: 'id' },
                     { data: 'name' },
-                    { data: 'description' },
+                    { data: 'customer' },
+                    { data: 'sub_category' },
+                    { data: 'parent_category' },
+                    { data: 'season' },
                     { data: null}
                 ],
                 columnDefs: [
