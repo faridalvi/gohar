@@ -24,7 +24,7 @@
                                     </select>
                                 </div>
                                 <div class="col ms-2">
-                                    <select name="customer" class="form-control rounded-0">
+                                    <select name="customer" class="form-control rounded-0" id="customerId">
                                         <option value="">Customer</option>
                                         @foreach($customers as $customer)
                                             <option value="{{$customer->id}}">{{$customer->name}}</option>
@@ -32,7 +32,7 @@
                                     </select>
                                 </div>
                                 <div class="col ms-2">
-                                    <select name="season" class="form-control rounded-0">
+                                    <select name="season" class="form-control rounded-0" id="seasonId">
                                         <option value="">Season</option>
                                         @foreach($seasons as $season)
                                             <option value="{{$season->id}}">{{$season->name}}</option>
@@ -40,7 +40,7 @@
                                     </select>
                                 </div>
                                 <div class="col ms-2">
-                                    <select name="region" class="form-control rounded-0">
+                                    <select name="region" class="form-control rounded-0" id="regionId">
                                         <option value="">Region</option>
                                         @foreach($regions as $region)
                                             <option value="{{$region->id}}">{{$region->name}}</option>
@@ -48,7 +48,7 @@
                                     </select>
                                 </div>
                                 <div class="col ms-2">
-                                    <select name="yarn" class="form-control rounded-0">
+                                    <select name="yarn" class="form-control rounded-0" id="yarnId">
                                         <option value="">Yarn Type</option>
                                         @foreach($yarns as $yarn)
                                             <option value="{{$yarn->id}}">{{$yarn->name}}</option>
@@ -68,11 +68,16 @@
     <script>
         $( function() {
             $( "#datepicker" ).datepicker();
+            var hash = {};
+            hash['main'] = hash['sub'] = hash['customerId']= hash['seasonId'] =hash['regionId'] =hash['yarnId']= "";
+
             $('#sub-category').html('<option value="">Sub Select</option>');
             $(document).ready(function (){
                 //Select Sub Category
-                $('#main-category').on('change focus', function () {
+                $('#main-category').on('change', function () {
                     var idMainCategory = this.value;
+                    hash['main'] = idMainCategory
+                    getFilters(hash)
                     $("#sub-category").html('');
                     $.ajax({
                         url: "{{route('fetchCategories')}}",
@@ -85,34 +90,54 @@
                         success: function (result) {
                             $('#sub-category').html('<option value="">Sub Category</option>');
                             $.each(result.categories, function (key, value) {
+                                $('#sub-category').on('change', function () {
+                                    hash['sub'] = value.id
+                                    getFilters(hash)
+                                });
                                 $("#sub-category").append('<option value="' + value.id + '" >' + value.name + '</option>');
                             });
                         }
                     });
                 });
-                //Filters
-                var mainCategory = document.getElementById('main-category').value
-                var subCategory = document.getElementById('sub-category').value
-                console.warn(mainCategory)
-                $.ajax({
-                    url: "{{route('getDashboardProducts')}}",
-                    type: "GET",
-                    data: {
-                        main_category : mainCategory,
-                        sub_category : subCategory,
-                    },
-                    dataType: 'json',
-                    success: function (result) {
-                        var productData = '';
-                        $.each(result.products, function (key, value) {
-                            var image ='{{ asset('product/')}}'+'/'+ value.image;
-                            productData+='<div class="col-md-2 product-image mb-2">';
-                            productData+='<img src="' + image + '" alt="'+value.name+'" class="img-thumbnail">';
-                            productData+='</div>';
-                        });
-                        $("#productData").append(productData);
-                    }
+                //Get Customer
+                $('#customerId').on('change', function () {
+                    hash['customerId'] = this.value;
+                    getFilters(hash)
                 });
+                //Get Season
+                $('#seasonId').on('change', function () {
+                    hash['seasonId'] = this.value;
+                    getFilters(hash)
+                });
+                //Get Region
+                $('#regionId').on('change', function () {
+                    hash['regionId'] = this.value;
+                    getFilters(hash)
+                });
+                //Get Yarn
+                $('#yarnId').on('change', function () {
+                    hash['yarnId'] = this.value;
+                    getFilters(hash)
+                });
+                //Filters
+                function getFilters(data){
+                    $.ajax({
+                        url: "{{route('getDashboardProducts')}}",
+                        type: "GET",
+                        data: data,
+                        dataType: 'json',
+                        success: function (result) {
+                            var productData = '';
+                            $.each(result.products, function (key, value) {
+                                var image ='{{ asset('product/')}}'+'/'+ value.image;
+                                productData+='<div class="col-md-2 product-image mb-2">';
+                                productData+='<img src="' + image + '" alt="'+value.name+'" class="img-thumbnail">';
+                                productData+='</div>';
+                            });
+                            $("#productData").append(productData);
+                        }
+                    });
+                }
 
             })
 
