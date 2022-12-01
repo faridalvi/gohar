@@ -77,8 +77,8 @@
                 $('#main-category').on('change', function () {
                     var idMainCategory = this.value;
                     hash['main'] = idMainCategory
+                    hash['sub'] = ''
                     getFilters(hash)
-                    $("#sub-category").html('');
                     $.ajax({
                         url: "{{route('fetchCategories')}}",
                         type: "POST",
@@ -90,10 +90,6 @@
                         success: function (result) {
                             $('#sub-category').html('<option value="">Sub Category</option>');
                             $.each(result.categories, function (key, value) {
-                                $('#sub-category').on('change', function () {
-                                    hash['sub'] = value.id
-                                    getFilters(hash)
-                                });
                                 $("#sub-category").append('<option value="' + value.id + '" >' + value.name + '</option>');
                             });
                         }
@@ -102,6 +98,10 @@
                 //Get Customer
                 $('#customerId').on('change', function () {
                     hash['customerId'] = this.value;
+                    getFilters(hash)
+                });
+                $('#sub-category').on('change', function () {
+                    hash['sub'] = this.value
                     getFilters(hash)
                 });
                 //Get Season
