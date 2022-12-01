@@ -1,6 +1,6 @@
 @extends('auth.app')
 @section('content')
-    <h3 class="mb-4">Login Here</h3>
+    <h3 class="mb-4">Login with Your Account</h3>
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div class="input-group mb-2">
