@@ -368,4 +368,7 @@ table.dataTable tbody th, table.dataTable tbody td{
     .sidebar.active {
         margin-left: 0;
     }
+    .product-image{
+        height: auto;
+    }
 }

@@ -2,63 +2,73 @@
 @section('title','Dashboard')
 @section('content')
     <div class="container-fluid">
-        <div class="py-4">
-            <p class="page-title">Dashboard</p>
+        <div class="card rounded-0 my-2">
+            <div class="card-body">
+                <div class="d-md-flex justify-content-between align-items-center py-1">
+                    <p class="page-title">Products</p>
+                    <div class="d-md-flex">
+                        <a class="btn btn-sm btn-success" href="{{route('product.create')}}">Add Product</a>
+                        <a class="btn btn-sm btn-warning" href="{{route('product.index')}}">View Products</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card rounded-0">
             <div class="card-body">
                 <div class="row">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <p class="page-title">Product Filters</p>
+                    </div>
                     <div class="col-md-12">
-
-                            <div class="row mb-4">
-                                <div class="col">
-                                    <select name="main_category" class="form-control rounded-0" id="main-category">
-                                        <option value="">Main Category</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col ms-2">
-                                    <select name="sub_category" class="form-control rounded-0" id="sub-category">
-                                    </select>
-                                </div>
-                                <div class="col ms-2">
-                                    <select name="customer" class="form-control rounded-0" id="customerId">
-                                        <option value="">Customer</option>
-                                        @foreach($customers as $customer)
-                                            <option value="{{$customer->id}}">{{$customer->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col ms-2">
-                                    <select name="season" class="form-control rounded-0" id="seasonId">
-                                        <option value="">Season</option>
-                                        @foreach($seasons as $season)
-                                            <option value="{{$season->id}}">{{$season->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col ms-2">
-                                    <select name="region" class="form-control rounded-0" id="regionId">
-                                        <option value="">Region</option>
-                                        @foreach($regions as $region)
-                                            <option value="{{$region->id}}">{{$region->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col ms-2">
-                                    <select name="yarn" class="form-control rounded-0" id="yarnId">
-                                        <option value="">Yarn Type</option>
-                                        @foreach($yarns as $yarn)
-                                            <option value="{{$yarn->id}}">{{$yarn->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                        <div class="row mb-4">
+                            <div class="col-md-2 mb-2">
+                                <select name="main_category" class="form-control rounded-0" id="main-category">
+                                    <option value="">Main Category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <div class="row mb-4" id="productData"></div>
+                            <div class="col-md-2 mb-2">
+                                <select name="sub_category" class="form-control rounded-0" id="sub-category">
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <select name="customer" class="form-control rounded-0" id="customerId">
+                                    <option value="">Customer</option>
+                                    @foreach($customers as $customer)
+                                        <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <select name="season" class="form-control rounded-0" id="seasonId">
+                                    <option value="">Season</option>
+                                    @foreach($seasons as $season)
+                                        <option value="{{$season->id}}">{{$season->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <select name="region" class="form-control rounded-0" id="regionId">
+                                    <option value="">Region</option>
+                                    @foreach($regions as $region)
+                                        <option value="{{$region->id}}">{{$region->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <select name="yarn" class="form-control rounded-0" id="yarnId">
+                                    <option value="">Yarn Type</option>
+                                    @foreach($yarns as $yarn)
+                                        <option value="{{$yarn->id}}">{{$yarn->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="row mb-4" id="productData"></div>
             </div>
         </div>
     </div>
@@ -127,9 +137,13 @@
                     success: function (result) {
                         var productData = '';
                         $.each(result.products, function (key, value) {
+                            var edit ='{{ route("product.edit", ":id") }}';
+                            edit = edit.replace(':id', value.id);
                             var image ='{{ asset('product/')}}'+'/'+ value.image;
-                            productData+='<div class="col-md-2 product-image mb-2">';
+                            productData+='<div class="col-lg-2 col-md-3 product-image mb-2">';
+                            productData+='<a href="'+edit+'" >';
                             productData+='<img src="' + image + '" alt="'+value.name+'" class="img-thumbnail">';
+                            productData+='</a>';
                             productData+='</div>';
                         });
                         $("#productData").append(productData);
@@ -145,17 +159,21 @@
                         success: function (result) {
                             $("#productData").html('')
                             var productData = '';
-                           if (result.products.length > 0) {
-                               $.each(result.products, function (key, value) {
-                                   var image = '{{ asset('product/')}}' + '/' + value.image;
-                                   productData += '<div class="col-md-2 product-image mb-2">';
-                                   productData += '<img src="' + image + '" alt="' + value.name + '" class="img-thumbnail">';
-                                   productData += '</div>';
-                               });
-                           }
-                           else{
-                               productData += '<div class="col-md-12 mb-2"><h1>No Data Found</h1></div>';
-                           }
+                            if (result.products.length > 0) {
+                                $.each(result.products, function (key, value) {
+                                    var edit ='{{ route("product.edit", ":id") }}';
+                                    edit = edit.replace(':id', value.id);
+                                    var image = '{{ asset('product/')}}' + '/' + value.image;
+                                    productData+='<div class="col-lg-2 col-md-3 product-image mb-2">';
+                                    productData+='<a href="'+edit+'" >';
+                                    productData+='<img src="' + image + '" alt="' + value.name + '" class="img-thumbnail">';
+                                    productData+='</a>';
+                                    productData+='</div>';
+                                });
+                            }
+                            else{
+                                productData += '<div class="col-md-12 mb-2"><h1>No Data Found</h1></div>';
+                            }
                             $("#productData").append(productData);
                         }
                     });
