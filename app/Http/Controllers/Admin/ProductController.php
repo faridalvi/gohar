@@ -76,10 +76,8 @@ class ProductController extends Controller
             $id = $record->id;
             $name = $record->name;
             $customer = (isset($record->customer) ? $record->customer->name : '');
-            $subCategory = (isset($record->category) ? $record->category->name : '');
-            $subCategoryId =(isset($record->category) ? $record->category->id : '');
-            $category = Category::where('id',$subCategoryId)->first();
-            $parentCategory = (isset($category) ? $category->parent->name : '');
+            $subCategory = (isset($record->subCategory) ? $record->subCategory->name : '');
+            $parentCategory = (isset($record->mainCategory) ? $record->mainCategory->name : '');
             $season = (isset($record->season) ? $record->season->name : '');
             $data_arr[] = array(
                 "id" => $id,
@@ -197,7 +195,8 @@ class ProductController extends Controller
         $product->date = $date;
         $product->name = $request->name;
         $product->sale_order = $request->sale_order;
-        $product->category_id = $request->sub_category;
+        $product->main_category_id = $request->main_category;
+        $product->sub_category_id = $request->sub_category;
         $product->season_id = $request->season;
         $product->age_group_id = $request->age_group;
         $product->country_id = $request->country;
@@ -340,7 +339,8 @@ class ProductController extends Controller
         $product->date = $date;
         $product->name = $request->name;
         $product->sale_order = $request->sale_order;
-        $product->category_id = $request->sub_category;
+        $product->main_category_id = $request->main_category;
+        $product->sub_category_id = $request->sub_category;
         $product->season_id = $request->season;
         $product->age_group_id = $request->age_group;
         $product->country_id = $request->country;

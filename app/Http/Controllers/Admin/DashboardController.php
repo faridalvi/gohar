@@ -28,9 +28,12 @@ class DashboardController extends Controller
         $seasonId = $request->get('seasonId');
         $regionId = $request->get('regionId');
         $yarnId = $request->get('yarnId');
-        $data['products'] = Product::orderBy('id','desc')->where(function ($q) use ($request,$sub,$customerId,$seasonId,$regionId,$yarnId){
+        $data['products'] = Product::orderBy('id','desc')->where(function ($q) use ($main,$sub,$customerId,$seasonId,$regionId,$yarnId){
+            if (!empty($main)){
+                $q->where('main_category_id',$main);
+            }
             if (!empty($sub)){
-                $q->where('category_id',$sub);
+                $q->where('sub_category_id',$sub);
             }
             if (!empty($seasonId)){
                 $q->where('season_id',$seasonId);

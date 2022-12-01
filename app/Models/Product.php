@@ -10,13 +10,16 @@ class Product extends Model
     use HasFactory;
     protected $table = 'products';
     protected $fillable = [
-        'entry','date','name','sale_order','category_id','season_id','age_group_id','country_id','region_id','customer_id','loom_type_id','greige_quality',
+        'entry','date','name','sale_order','main_category_id','sub_category_id','season_id','age_group_id','country_id','region_id','customer_id','loom_type_id','greige_quality',
         'composition','finish_fabric_quality','gsm','process','atribute_yarn_id','atribute_weaving_id','atribute_processing_id','atribute_stitching_id',
         'fabric_type_id','description','image','gallery','created_by','updated_by'
     ];
     //Category
-    public function category(){
-        return $this->belongsTo(Category::class,'category_id');
+    public function mainCategory(){
+        return $this->belongsTo(Category::class,'main_category_id');
+    }
+    public function subCategory(){
+        return $this->belongsTo(Category::class,'sub_category_id');
     }
     //Season
     public function season(){

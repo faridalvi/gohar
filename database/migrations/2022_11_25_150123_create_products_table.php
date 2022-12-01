@@ -19,7 +19,8 @@ class CreateProductsTable extends Migration
             $table->timestamp('date')->nullable();
             $table->string('name')->nullable();
             $table->string('sale_order')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('main_category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->unsignedBigInteger('season_id')->nullable();
             $table->unsignedBigInteger('age_group_id')->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
@@ -41,7 +42,8 @@ class CreateProductsTable extends Migration
             $table->text('gallery')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('restrict');
+            $table->foreign('main_category_id')->references('id')->on('categories')->onDelete('restrict');
+            $table->foreign('sub_category_id')->references('id')->on('categories')->onDelete('restrict');
             $table->foreign('season_id')->references('id')->on('seasons')->onDelete('restrict');
             $table->foreign('age_group_id')->references('id')->on('age_groups')->onDelete('restrict');
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('restrict');

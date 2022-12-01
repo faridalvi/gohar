@@ -13,8 +13,11 @@ class Category extends Model
         'name','slug','parent_id','created_by','updated_by'
     ];
     //Product
-    public function product(){
-        return $this->hasMany(Product::class,'category_id');
+    public function mainCategoryproduct(){
+        return $this->hasMany(Product::class,'main_category_id');
+    }
+    public function subCategoryproduct(){
+        return $this->hasMany(Product::class,'sub_category_id');
     }
     //Parent Has Children
     public function children() {
